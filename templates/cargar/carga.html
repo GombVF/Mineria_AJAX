@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  {% load static %}
+  <script type="text/javascript" src="{% static 'cargar/script.js' %}"></script>
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    nav {
+      background-color: #343a40;
+      padding: 10px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-right: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    article {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    form label {
+      font-weight: bold;
+    }
+
+    form input[type="file"] {
+      margin: 10px 0;
+    }
+
+    form input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    form input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    #tabla {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="{% url 'cargaDatos' %}">Datos</a></li>
+      <li><a href="{% url 'eda' %}">EDA</a></li>
+      <li><a href="{% url 'acpd' %}">ACP y ACD</a></li>
+      <li><a href="{% url 'pronostico' %}">Pronóstico</a></li>
+    </ul>
+  </nav>
+  <article>
+    <section>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Archivo: </label>
+        <input type="file" accept=".csv" name="csv_file" required="True">
+        <input type="submit" value="Enviar">
+      </form>
+    </section>
+  </article>
+  <section id="tabla">
+    {{ data | safe }}
+  </section>
+
+</body>
+<footer>
+
+</footer>
+
+</html>

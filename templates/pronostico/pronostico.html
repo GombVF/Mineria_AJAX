@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  {% load static %}
+  <script type="text/javascript" src="{% static 'pronostico/pronostico.js' %}"></script>
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    nav {
+      background-color: #343a40;
+      padding: 10px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-right: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    article {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    select,
+    input[type="number"],
+    input[type="submit"],
+    button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="submit"],
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    section {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      border-bottom: 2px solid #343a40;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="{% url 'cargaDatos' %}">Datos</a></li>
+      <li><a href="{% url 'eda' %}">EDA</a></li>
+      <li><a href="{% url 'acpd' %}">ACP y ACD</a></li>
+      <li><a href="{% url 'pronostico' %}">Pronóstico</a></li>
+    </ul>
+  </nav>
+  <article>
+    {% csrf_token %}
+    <section>
+      <form id="graficas">
+        <select name="columnas" id="columnas" multiple>
+          {% for i in data.columnas %}
+          <option>{{ i }}</option>
+          {% endfor %}
+        </select>
+        <input type="submit">
+      </form>
+      <button onclick="limpiarImagenes('#img-graficas')">Limpiar</button>
+    </section>
+    <section id="img-graficas"></section>
+    <section>
+      <select id="metodo">
+        <option>Seleccionar...</option>
+        <option>Árboles</option>
+<!--        <option>Bosque</option>-->
+      </select>
+      <section id="arbolForm" style="display: none;">
+        <h2>ÁRBOLES</h2>
+        <select name="columnas" id="yarbol">
+          {% for i in data.columnas %}
+          <option>{{ i }}</option>
+          {% endfor %}
+        </select>
+        <label>tamaño de prueba</label>
+        <input type="number" min="0.01" max="0.99" step="0.01" id="testArbol">
+        <button onclick="realizarPronosticoArbol()">Enviar</button>
+        <button onclick="limpiarImagenes('#img-graficas')">Limpiar</button>
+      </section>
+      <section id="bosqueForm" style="display: none;">
+        <h2>BOSQUE</h2>
+        <select name="columnas" id="y">
+          {% for i in data.columnas %}
+          <option>{{ i }}</option>
+          {% endfor %}
+        </select>
+        <label>tamaño de prueba</label>
+        <input type="number" min="0.01" max="0.99" step="0.01" id="testSize">
+        <button onclick="realizarPronosticoBosque()">Enviar</button>
+        <button onclick="limpiarImagenes('#img-graficas')">Limpiar</button>
+      </section>
+      <section id="X"></section>
+      <section id="Y"></section>
+      <section id="Xtest"></section>
+      <section id="Ycomp"></section>
+      <section id="predInfo"></section>
+      <section id="predGraph"></section>
+      <section id="tree"></section>
+    </section>
+  </article>
+  <footer></footer>
+</body>
+
+</html>
